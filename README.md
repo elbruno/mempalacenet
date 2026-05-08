@@ -2,12 +2,29 @@
 
 [![CI](https://github.com/elbruno/ElBruno.MempalaceNet/actions/workflows/ci.yml/badge.svg)](https://github.com/elbruno/ElBruno.MempalaceNet/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![NuGet](https://img.shields.io/badge/NuGet-v0.15.1-blue.svg)](https://www.nuget.org/packages/mempalacenet)
+[![NuGet](https://img.shields.io/nuget/v/mempalacenet.svg)](https://www.nuget.org/packages/mempalacenet)
 [![Tests](https://img.shields.io/badge/Tests-152%2F152%20passing-brightgreen.svg)](#)
 
 A **.NET port** of [MemPalace](https://github.com/MemPalace/mempalace) — local-first AI memory that stores everything verbatim, searches semantically, and organizes knowledge through a *wings / rooms / drawers* hierarchy. No cloud calls by default, powered by ONNX embeddings.
 
-> 🎯 **Status:** v0.15.1 — Production-ready with advanced E2E testing, comprehensive journey guides, and skill pattern library.
+> 🎯 **Status:** v0.15.2 — Production-ready with advanced E2E testing, comprehensive journey guides, and skill pattern library.
+
+## NuGet Packages
+
+MemPalace.NET is published as a suite of focused libraries — install only what you need:
+
+| Package | Description | NuGet |
+|---------|-------------|-------|
+| [`mempalacenet`](https://www.nuget.org/packages/mempalacenet) | CLI tool + meta-package (installs all) | [![NuGet](https://img.shields.io/nuget/v/mempalacenet.svg)](https://www.nuget.org/packages/mempalacenet) |
+| [`MemPalace.Core`](https://www.nuget.org/packages/MemPalace.Core) | Domain types, storage interfaces, PalaceRef | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Core.svg)](https://www.nuget.org/packages/MemPalace.Core) |
+| [`MemPalace.Backends.Sqlite`](https://www.nuget.org/packages/MemPalace.Backends.Sqlite) | SQLite backend with BLOB vectors + cosine similarity | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Backends.Sqlite.svg)](https://www.nuget.org/packages/MemPalace.Backends.Sqlite) |
+| [`MemPalace.Ai`](https://www.nuget.org/packages/MemPalace.Ai) | M.E.AI integration — ONNX, Ollama, OpenAI, Azure | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Ai.svg)](https://www.nuget.org/packages/MemPalace.Ai) |
+| [`MemPalace.Search`](https://www.nuget.org/packages/MemPalace.Search) | Semantic, keyword & hybrid search with reranking | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Search.svg)](https://www.nuget.org/packages/MemPalace.Search) |
+| [`MemPalace.Mining`](https://www.nuget.org/packages/MemPalace.Mining) | Content ingestion: files, conversation transcripts | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Mining.svg)](https://www.nuget.org/packages/MemPalace.Mining) |
+| [`MemPalace.KnowledgeGraph`](https://www.nuget.org/packages/MemPalace.KnowledgeGraph) | Temporal entity-relationship graph with validity windows | [![NuGet](https://img.shields.io/nuget/v/MemPalace.KnowledgeGraph.svg)](https://www.nuget.org/packages/MemPalace.KnowledgeGraph) |
+| [`MemPalace.Mcp`](https://www.nuget.org/packages/MemPalace.Mcp) | Model Context Protocol server (Claude Desktop, VS Code) | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Mcp.svg)](https://www.nuget.org/packages/MemPalace.Mcp) |
+| [`MemPalace.Agents`](https://www.nuget.org/packages/MemPalace.Agents) | Microsoft Agent Framework integration + diaries | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Agents.svg)](https://www.nuget.org/packages/MemPalace.Agents) |
+| [`MemPalace.Diagnostics`](https://www.nuget.org/packages/MemPalace.Diagnostics) | Health checks, metrics, and observability hooks | [![NuGet](https://img.shields.io/nuget/v/MemPalace.Diagnostics.svg)](https://www.nuget.org/packages/MemPalace.Diagnostics) |
 
 ## Why MemPalace.NET?
 
@@ -31,7 +48,7 @@ See [examples/README.md](./examples/README.md) for detailed walkthroughs and lea
 
 ```bash
 # Install the CLI tool
-dotnet tool install -g mempalacenet --version 0.15.1
+dotnet tool install -g mempalacenet --version 0.15.2
 
 # Initialize a new palace
 mempalacenet init ~/my-palace
