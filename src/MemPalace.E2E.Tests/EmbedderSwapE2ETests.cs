@@ -79,7 +79,7 @@ public sealed class EmbedderSwapE2ETests : IDisposable
         // Phase 1: Initialize with CustomEmbedder ("custom-v1")
         var palaceRef = new PalaceRef("identity-palace", Path.Combine(_testDir, "identity"));
         var embedder1 = new TestCustomEmbedder("custom-v1", 128);
-        using var backend = await SqliteBackend.CreateAsync(embedder1);
+        await using var backend = await SqliteBackend.CreateAsync(embedder1);
 
         var collection = await backend.GetCollectionAsync(
             palaceRef,
@@ -122,7 +122,7 @@ public sealed class EmbedderSwapE2ETests : IDisposable
         // Phase 1: Initialize with LocalEmbedder (default model)
         var palaceRef = new PalaceRef("model-change-palace", Path.Combine(_testDir, "model-change"));
         using var embedder1 = new LocalEmbedder();
-        using var backend = await SqliteBackend.CreateAsync(embedder1);
+        await using var backend = await SqliteBackend.CreateAsync(embedder1);
 
         var collection1 = await backend.GetCollectionAsync(
             palaceRef,
@@ -162,7 +162,7 @@ public sealed class EmbedderSwapE2ETests : IDisposable
 
         // Collection 1: LocalEmbedder
         using var localEmbedder = new LocalEmbedder();
-        using var backend1 = await SqliteBackend.CreateAsync(localEmbedder);
+        await using var backend1 = await SqliteBackend.CreateAsync(localEmbedder);
 
         var localCollection = await backend1.GetCollectionAsync(
             palaceRef,
@@ -178,7 +178,7 @@ public sealed class EmbedderSwapE2ETests : IDisposable
 
         // Collection 2: CustomEmbedder
         var customEmbedder = new TestCustomEmbedder();
-        using var backend2 = await SqliteBackend.CreateAsync(customEmbedder);
+        await using var backend2 = await SqliteBackend.CreateAsync(customEmbedder);
 
         var customCollection = await backend2.GetCollectionAsync(
             palaceRef,
@@ -212,7 +212,7 @@ public sealed class EmbedderSwapE2ETests : IDisposable
 
         // Use embedder
         var palaceRef = new PalaceRef("dispose-palace", Path.Combine(_testDir, "dispose"));
-        using var backend = await SqliteBackend.CreateAsync(disposableEmbedder);
+        await using var backend = await SqliteBackend.CreateAsync(disposableEmbedder);
 
         var collection = await backend.GetCollectionAsync(
             palaceRef,

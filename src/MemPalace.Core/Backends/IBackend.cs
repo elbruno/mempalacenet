@@ -17,7 +17,8 @@ public interface IBackend : IAsyncDisposable
         string collectionName,
         bool create = false,
         IEmbedder? embedder = null,
-        CancellationToken ct = default);
+        CancellationToken ct = default,
+        int? dimensions = null);
 
     /// <summary>
     /// Lists all collection names in a palace.

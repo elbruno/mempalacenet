@@ -17,7 +17,8 @@ public sealed class InMemoryBackend : IBackend
         string collectionName,
         bool create = false,
         IEmbedder? embedder = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        int? dimensions = null)
     {
         ThrowIfDisposed();
 

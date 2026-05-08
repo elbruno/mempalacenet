@@ -20,12 +20,23 @@ public sealed class SqliteBackend : IBackend
         _baseDirectory = baseDirectory ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MemPalace");
     }
 
+    /// <summary>
+    /// Static factory for creating a SqliteBackend with an optional base directory.
+    /// The embedder parameter is accepted for API compatibility but the backend is not
+    /// tied to a specific embedder — each collection may use its own.
+    /// </summary>
+    public static ValueTask<SqliteBackend> CreateAsync(
+        IEmbedder? embedder = null,
+        string? baseDirectory = null)
+        => ValueTask.FromResult(new SqliteBackend(baseDirectory));
+
     public async ValueTask<ICollection> GetCollectionAsync(
         PalaceRef palace,
         string collectionName,
         bool create = false,
         IEmbedder? embedder = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        int? dimensions = null)
     {
         EnsureNotDisposed();
 
@@ -50,7 +61,7 @@ public sealed class SqliteBackend : IBackend
             return new SqliteCollection(connection, collectionName, embedder.Dimensions, embedder.ModelIdentity);
         }
 
-        var (dimensions, embedderIdentity) = await GetCollectionMetadataAsync(connection, collectionName, ct);
+        var (storedDimensions, embedderIdentity) = await GetCollectionMetadataAsync(connection, collectionName, ct);
 
         if (embedder != null && embedder.ModelIdentity != embedderIdentity)
         {
@@ -58,7 +69,7 @@ public sealed class SqliteBackend : IBackend
                 $"Collection '{collectionName}' was created with embedder '{embedderIdentity}' but provided embedder is '{embedder.ModelIdentity}'");
         }
 
-        return new SqliteCollection(connection, collectionName, dimensions, embedderIdentity);
+        return new SqliteCollection(connection, collectionName, storedDimensions, embedderIdentity);
     }
 
     public async ValueTask<IReadOnlyList<string>> ListCollectionsAsync(PalaceRef palace, CancellationToken ct = default)
@@ -206,9 +217,11 @@ public sealed class SqliteBackend : IBackend
             )";
         await cmd.ExecuteNonQueryAsync(ct);
 
-        // Create index on timestamp for efficient wake-up queries
+        // Create index on timestamp for efficient wake-up queries.
+        // Index name must use alphanumeric+underscore only, so sanitize the collection name.
+        var safeCollectionName = collectionName.Replace("-", "_").Replace(".", "_");
         cmd.CommandText = $@"
-            CREATE INDEX IF NOT EXISTS idx_{collectionName}_timestamp 
+            CREATE INDEX IF NOT EXISTS idx_{safeCollectionName}_timestamp 
             ON [{tableName}] (json_extract(metadata, '$.timestamp'))";
         await cmd.ExecuteNonQueryAsync(ct);
 

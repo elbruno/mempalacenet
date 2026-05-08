@@ -96,7 +96,7 @@ public sealed class EmbedderIntegrationTests : IDisposable
         // Arrange
         var palaceRef = new PalaceRef("test-mismatch", Path.Combine(_testDir, "mismatch"));
         using var localEmbedder = new LocalEmbedder(); // 384 dimensions
-        using var backend = await SqliteBackend.CreateAsync(localEmbedder);
+        await using var backend = await SqliteBackend.CreateAsync(localEmbedder);
 
         // Act - create collection with local embedder
         var collection = await backend.GetCollectionAsync(
@@ -130,7 +130,7 @@ public sealed class EmbedderIntegrationTests : IDisposable
         // Arrange
         var palaceRef = new PalaceRef("test-identity", Path.Combine(_testDir, "identity"));
         var embedder1 = new TestCustomEmbedder("custom-v1", 128);
-        using var backend = await SqliteBackend.CreateAsync(embedder1);
+        await using var backend = await SqliteBackend.CreateAsync(embedder1);
 
         // Act - create collection with embedder1
         var collection = await backend.GetCollectionAsync(
@@ -166,7 +166,7 @@ public sealed class EmbedderIntegrationTests : IDisposable
         {
             var palaceRef = new PalaceRef($"test-dispose-{i}", Path.Combine(_testDir, $"dispose-{i}"));
             using var embedder = new LocalEmbedder();
-            using var backend = await SqliteBackend.CreateAsync(embedder);
+            await using var backend = await SqliteBackend.CreateAsync(embedder);
 
             var collection = await backend.GetCollectionAsync(
                 palaceRef,
@@ -195,7 +195,7 @@ public sealed class EmbedderIntegrationTests : IDisposable
         var palaceRef = new PalaceRef("test-multi", Path.Combine(_testDir, "multi"));
         using var localEmbedder = new LocalEmbedder();
         var customEmbedder = new TestCustomEmbedder();
-        using var backend = await SqliteBackend.CreateAsync(localEmbedder);
+        await using var backend = await SqliteBackend.CreateAsync(localEmbedder);
 
         // Act - create collection with local embedder
         var localCollection = await backend.GetCollectionAsync(
@@ -211,7 +211,7 @@ public sealed class EmbedderIntegrationTests : IDisposable
             embeddings: await localEmbedder.EmbedAsync(new[] { "local memory" }));
 
         // Act - create collection with custom embedder
-        using var customBackend = await SqliteBackend.CreateAsync(customEmbedder);
+        await using var customBackend = await SqliteBackend.CreateAsync(customEmbedder);
         var customCollection = await customBackend.GetCollectionAsync(
             palaceRef,
             "custom-collection",

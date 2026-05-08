@@ -30,6 +30,28 @@ public interface ICollection : IAsyncDisposable
         CancellationToken ct = default);
 
     /// <summary>
+    /// Convenience overload: adds records from parallel id/document/embedding lists.
+    /// </summary>
+    ValueTask AddAsync(
+        IReadOnlyList<string> ids,
+        IReadOnlyList<string> documents,
+        IReadOnlyList<ReadOnlyMemory<float>> embeddings,
+        IReadOnlyList<IReadOnlyDictionary<string, object?>>? metadatas = null,
+        CancellationToken ct = default)
+    {
+        var records = new List<EmbeddedRecord>(ids.Count);
+        for (int i = 0; i < ids.Count; i++)
+        {
+            records.Add(new EmbeddedRecord(
+                Id: ids[i],
+                Document: documents[i],
+                Metadata: metadatas?[i] ?? new Dictionary<string, object?>(),
+                Embedding: embeddings[i]));
+        }
+        return AddAsync(records, ct);
+    }
+
+    /// <summary>
     /// Upserts records (insert or update).
     /// </summary>
     ValueTask UpsertAsync(

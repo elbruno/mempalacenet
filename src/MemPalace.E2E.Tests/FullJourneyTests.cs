@@ -96,7 +96,7 @@ public sealed class FullJourneyTests : IDisposable
             new EntityRef("person", "alice"),
             "works_on",
             new EntityRef("project", "auth-module"),
-            new Dictionary<string, object> { { "name", "Alice" }, { "role", "engineer" } }
+            new Dictionary<string, object?> { { "name", "Alice" }, { "role", "engineer" } }
         );
         var temporal = new TemporalTriple(triple, now, null, now);
         await kg.AddAsync(temporal);
