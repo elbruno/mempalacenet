@@ -115,6 +115,41 @@ jobs:
         timeout-minutes: 15
         run: dotnet nuget push artifacts/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
+      - name: Verify NuGet packages
+        continue-on-error: true
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PACKAGES="mempalacenet MemPalace.Core MemPalace.Backends.Sqlite MemPalace.Ai MemPalace.Search MemPalace.Mining MemPalace.KnowledgeGraph MemPalace.Mcp MemPalace.Agents MemPalace.Diagnostics mempalacenet-bench"
+
+          echo "⏳ Waiting for NuGet indexing (up to 5 minutes)..."
+          sleep 60  # Give NuGet at least 60s before first check
+
+          ALL_OK=true
+          for PKG in $PACKAGES; do
+            PKG_LOWER=$(echo "$PKG" | tr '[:upper:]' '[:lower:]')
+            FOUND=false
+            for i in 1 2 3 4 5; do
+              VERSIONS=$(curl -sf "https://api.nuget.org/v3-flatcontainer/${PKG_LOWER}/index.json" | grep -o '"[0-9][^"]*"' | tr -d '"' || true)
+              if echo "$VERSIONS" | grep -qx "$VERSION"; then
+                FOUND=true
+                break
+              fi
+              [ $i -lt 5 ] && sleep 30
+            done
+            if $FOUND; then
+              echo "✅ $PKG $VERSION"
+            else
+              echo "⚠️  $PKG — $VERSION not yet visible (may still be indexing)"
+              ALL_OK=false
+            fi
+          done
+
+          if $ALL_OK; then
+            echo "✅ All packages verified at $VERSION"
+          else
+            echo "⚠️  Some packages not yet indexed — NuGet propagation can take up to 30 minutes. Check manually."
+          fi
+
       - name: Upload NuGet package artifact
         uses: actions/upload-artifact@v4
         with:

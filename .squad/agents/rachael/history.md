@@ -1,5 +1,18 @@
 # Rachael — History
 
+## 2026-05-08: Version Consistency CI Enforcement
+
+**Mission:** Add CI guardrails to enforce that all 11 NuGet packages always publish at the same version.
+
+**Files changed:**
+- `.github/workflows/ci.yml` — Added `version-consistency` job (runs before `build`): checks no `.csproj` overrides `<Version>`, verifies `Directory.Build.props` has exactly one `<Version>` tag.
+- `.github/workflows/publish.yml` — Added "Verify NuGet packages" step (after push, `continue-on-error: true`): polls NuGet API for up to 5 minutes, prints status for all 11 packages.
+
+**Versioning policy now enforced:**
+- Single source of truth: `src/Directory.Build.props` `<Version>` tag
+- CI fails fast if any `.csproj` declares its own `<Version>`
+- Post-publish verification warns (non-blocking) if packages are slow to index on NuGet.org
+
 ## 2026-04-28: Phase 3 Skill Marketplace MVP — Complete Implementation
 
 **Mission:** Design and implement Phase 3 Skill Marketplace MVP with local discovery, enhanced CLI, and comprehensive documentation.

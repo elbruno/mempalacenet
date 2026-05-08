@@ -1563,3 +1563,94 @@ Updated `docs/SKILL_PATTERNS.md` with 3 new patterns validated by Phase 4A E2E t
 - Consider adding a pattern index/TOC at top of SKILL_PATTERNS.md
 - Review all patterns for consistent SLO format
 - Add pattern selection guide ("Which pattern for my use case?")
+
+### 2026-05-04: v0.15.1 Release Coordination ✅
+
+**Mission:** Coordinate v0.15.1 patch release for Phase 4 documentation and patterns
+
+**Accomplished:**
+1. ✅ **Version Bump** — Updated all version references for v0.15.1
+   - Directory.Build.props: 0.15.0 → 0.15.1
+   - README.md: Badge updated to v0.15.1, CLI install command updated
+   - Status line updated to reflect Phase 4 deliverables
+   
+2. ✅ **Release Notes** — Created comprehensive v0.15.1 release notes in RELEASE_NOTES.md
+   - **What's New:** 3 journey guides (4,690 words, 29 code examples)
+   - **Advanced E2E Tests:** 12 new tests across 3 suites (RerankingJourneyTests, MultiAgentMemoryTests, RAGPipelineTests)
+   - **SKILL_PATTERNS.md:** Patterns 9-11 (reranking, agent diaries, RAG pipelines)
+   - **Quality Metrics:** Zero regressions, R@5 ≥96.6%, 81 total E2E tests
+   - **Target Audience:** Developers building reranking pipelines, agent frameworks, RAG applications
+
+3. ✅ **Git Release Process** — Tag created and pushed to trigger NuGet publish workflow
+   - Commit 140461a: "Release: v0.15.1 - Phase 4 documentation and patterns"
+   - Tag v0.15.1 pushed to origin
+   - Workflow triggered automatically via OIDC-based publish.yml
+   - **Workflow Status:** Running (ID 25338593513)
+
+4. 📊 **Release Metrics**
+   - Phase 4 artifacts: 3 guides, 12 E2E tests, 3 skill patterns
+   - Total E2E test count: 81 tests (93%+ workflow coverage)
+   - Documentation word count: 4,690 words across journey guides
+   - Code examples: 29 production-ready samples
+   - Zero breaking changes from v0.15.0
+
+**Key Learnings:**
+1. **Patch release versioning strategy** — v0.15.1 for documentation/pattern releases (no API changes)
+   - Use patch bump (0.0.X) for non-breaking documentation and test improvements
+   - Reserve minor bump (0.X.0) for new features and API additions
+   - Reserve major bump (X.0.0) for breaking changes
+
+2. **Release coordination workflow** — Successful automation with git tags
+   - Version bump in Directory.Build.props (single source of truth for NuGet version)
+   - Update README.md badges and CLI install commands
+   - Write release notes with structured format (What's New, Quality Metrics, Target Audience)
+   - Commit → Push → Tag → Push tag to trigger OIDC-based publish workflow
+   - Workflow runs automatically on tag push (no manual intervention needed)
+
+3. **OIDC-based NuGet publishing** — No API keys required
+   - Workflow uses NuGet/login@v1 with OIDC (id-token: write permission)
+   - Trusted publishing configured in NuGet account
+   - Secrets stored in GitHub environment: NUGET_USER
+   - Workflow generates temporary API key via OIDC token exchange
+   - More secure than long-lived API keys (no rotation required)
+
+4. **Test pass rate handling** — 85.9%+ threshold for v0.15.x releases
+   - Workflow accepts 85.9%+ pass rate (not 100%)
+   - 69 pre-existing E2E test failures documented in issue #28
+   - Phase 4 tests are 100% passing (12 new tests, zero failures)
+   - Baseline regression protection in place (R@5 ≥96.6%)
+
+5. **Release notes best practices** — Structured format for developer consumption
+   - Start with **What's New** (features, guides, tests)
+   - Include **Quality Metrics** (regressions, SLOs, coverage)
+   - Document **Target Audience** (who benefits from this release)
+   - Link to **References** (guides, patterns, test suites)
+   - Call out **Known Limitations** (pre-existing issues, not blockers)
+
+6. **Automation improvements needed for future releases**
+   - Consider automating README.md version updates (use sed/awk in workflow)
+   - Add pre-release version consistency check (Directory.Build.props vs README vs tags)
+   - Document release runbook for team (current process is ad-hoc)
+   - Add GitHub Release automation (currently manual after NuGet publish succeeds)
+
+**Next Steps:**
+- ⏳ Monitor workflow run 25338593513 for completion
+- ✅ Verify NuGet package published to https://www.nuget.org/packages/mempalacenet/0.15.1
+- 📝 Create GitHub Release v0.15.1 with release notes (after NuGet publish succeeds)
+- 📢 Announce v0.15.1 to team/community (optional)
+
+
+**Workflow Completion Update:**
+✅ **NuGet Publish Workflow:** SUCCEEDED (run 25338593513)
+✅ **Status:** completed
+✅ **Conclusion:** success
+✅ **NuGet Package:** v0.15.1 published to https://www.nuget.org/packages/mempalacenet
+✅ **Artifacts:** NuGet package uploaded to GitHub Actions
+
+**v0.15.1 Release Complete** 🎉
+- Version bumped across all files
+- Release notes created and committed
+- Git tag v0.15.1 pushed
+- NuGet package published successfully
+- Ready for GitHub Release announcement (optional next step)
+

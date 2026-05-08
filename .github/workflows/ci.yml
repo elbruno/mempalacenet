@@ -7,8 +7,32 @@ on:
   workflow_dispatch:
 
 jobs:
+  version-consistency:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check no per-project version overrides
+      run: |
+        if grep -rl "<Version>" src --include="*.csproj"; then
+          echo "❌ Version override detected! Remove <Version> from .csproj files. All packages must use src/Directory.Build.props."
+          exit 1
+        fi
+        echo "✅ No per-project version overrides found."
+
+    - name: Verify single version source in Directory.Build.props
+      run: |
+        COUNT=$(grep -c "<Version>" src/Directory.Build.props || true)
+        if [ "$COUNT" -ne 1 ]; then
+          echo "❌ Expected exactly 1 <Version> in Directory.Build.props, found $COUNT"
+          exit 1
+        fi
+        echo "✅ Single version source confirmed in Directory.Build.props."
+
   build:
     runs-on: ubuntu-latest
+    needs: version-consistency
 
     steps:
     - name: Checkout code
